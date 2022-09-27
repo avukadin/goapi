@@ -3,8 +3,6 @@ package main
 import (
 		"fmt"
 		"net/http"
-		"articles/articles"
-		"github.com/avukadin/goapi/articles"
 )
 
 func main(){
