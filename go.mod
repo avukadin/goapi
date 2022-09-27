@@ -1,3 +1,3 @@
-module github.com/avukadin/goapi.git
+module github.com/avukadin/goapi
 
 go 1.19
