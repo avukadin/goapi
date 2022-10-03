@@ -1,16 +1,18 @@
 package main
 
 import (
-	"log"
 	"fmt"
+	"log"
 	"encoding/json"
 	"net/http" 
+
 	"github.com/go-chi/chi"
 	"github.com/avukadin/goapi/pkg/mongocon"
 )
 
 type Client struct { Handle string } 
-func getArticle(w http.ResponseWriter, r *http.Request){	
+
+func getClientID(w http.ResponseWriter, r *http.Request){	
 
 	// Parse client handle
 	var c Client
@@ -20,19 +22,17 @@ func getArticle(w http.ResponseWriter, r *http.Request){
 	}
 
 	// Connect to mongo
-	mongoClient:=mongocon.GetMongoClient()
+	mongoClient := mongocon.GetMongoClient()
 	clientID := mongocon.GetClientID(mongoClient, c.Handle)
 
 	var out = []byte(clientID);
 	w.Write(out);
-	// fmt.Println(string(json.Marshal(c)))
-	// fmt.Println(c.Handle)
-	fmt.Println("Done!")
 }
 
 func main(){
 	r := chi.NewRouter();
-	r.Get("/getArticle", getArticle)
+	r.Get("/getClientID", getClientID)
 
+	fmt.Println("API is running.")
 	http.ListenAndServe(":8080", r)
 }

@@ -4,9 +4,9 @@ import (
 	"context"
 	"log"
 	"time"
-	"fmt"
 
 	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/avukadin/goapi/constants"
 	
 	"go.mongodb.org/mongo-driver/mongo/options"	
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,7 +15,7 @@ import (
 
 
 func GetMongoClient() *mongo.Client{
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
+	client, err := mongo.NewClient(options.Client().ApplyURI(constants.MONGO_URI))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,17 +33,23 @@ func getMongoContext(client *mongo.Client) context.Context {
 
 
 func GetClientID(client *mongo.Client, clientHandle string) string{
-	clientsCollection := client.Database("api").Collection("users")
-	ctx:=getMongoContext(client)	
-	
-	cursor, err := clientsCollection.Find(ctx, bson.D{{"email",clientHandle}})
 
+	// Connect
+	clientsCollection := client.Database("dev-api").Collection("clients")
+	ctx := getMongoContext(client)	
+
+	// Query
+	cursor, err := clientsCollection.Find(ctx, bson.D{{"handle",clientHandle}})
+	if err != nil {log.Fatal(err)}
 	var results []bson.M
-	if err = cursor.All(context.TODO(), &results); err != nil {
+	if err = cursor.All(ctx, &results); err != nil {
 		log.Fatal(err)
 	}
-	for _, result := range results {
-        fmt.Println(result["_id"])
-	}
+
+
+	if len(results) == 0 {
+		return "Not Found"
+	}	
+
 	return results[0]["_id"].(primitive.ObjectID).String()
 }
