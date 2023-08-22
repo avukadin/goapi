@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/avukadin/goAPI/api"
-	"github.com/avukadin/goAPI/internal/tools"
+	"github.com/avukadin/goapi/api"
+	"github.com/avukadin/goapi/internal/tools"
 	log "github.com/sirupsen/logrus"
 )
 

@@ -1,4 +1,4 @@
-module github.com/avukadin/goAPI
+module github.com/avukadin/goapi
 
 go 1.20
 
